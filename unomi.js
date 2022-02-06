@@ -1,4 +1,4 @@
-let uno_card_num = 108; // すべてのカードの枚数
+let uno_card_num = 300; // すべてのカードの枚数
 let max_of_number = 16; // 各色のカードの最大数 (10, 11, 12, 13は役カード)
 let num_of_color = 4; // 色の種類数
 
@@ -31,20 +31,69 @@ wild_draw_four_num = 0;
 
 
 // とりあえず文字列を返却する
-$("#btn1").on("click", function()  { // 参考文献: https://techacademy.jp/magazine/9650
+$("#btn1").on("click", function() {
+    var remaining_of_1_doc = document.getElementById("remaining-num1");
+    var remaining_of_1 = Number(remaining_of_1_doc.innerText);
+
+    if (remaining_of_1==0) {remaining_of_1_doc.textContent = `${remaining_of_1}`;}
+    else {
+        what_card();
+        remaining_of_1 -= 1;
+        remaining_of_1_doc.textContent = `${remaining_of_1}`;
+    }
+});
+$("#btn2").on("click", function() {
+    var remaining_of_2_doc = document.getElementById("remaining-num2");
+    var remaining_of_2 = Number(remaining_of_2_doc.innerText);
+    if (remaining_of_2==0) {remaining_of_2_doc.textContent = `${remaining_of_2}`;}
+    else {
+        what_card();
+        remaining_of_2 -= 1;
+        remaining_of_2_doc.textContent = `${remaining_of_2}`;
+    }
+});
+$("#btn3").on("click", function() {
+    var remaining_of_3_doc = document.getElementById("remaining-num3");
+    var remaining_of_3 = Number(remaining_of_3_doc.innerText);
+    if (remaining_of_3==0) {remaining_of_3_doc.textContent = `${remaining_of_3}`;}
+    else {
+        what_card();
+        remaining_of_3 -= 1;
+        remaining_of_3_doc.textContent = `${remaining_of_3}`;
+    }
+});
+$("#btn4").on("click", function() {
+    var remaining_of_4_doc = document.getElementById("remaining-num4");
+    var remaining_of_4 = Number(remaining_of_4_doc.innerText);
+    if (remaining_of_4==0) {remaining_of_4_doc.textContent = `${remaining_of_4}`;}
+    else {
+        what_card();
+        remaining_of_4 -= 1;
+        remaining_of_4_doc.textContent = `${remaining_of_4}`;
+    }
+});
+
+
+
+
+
+function what_card() {
     counter_total += 1;
-    
+
     var random_num = 0;
+    var color_str = '';
+
     loop1: for(var _i = 0; _i < uno_card_num; _i++) { // 同じカードが出ないようにする。
 
         random_num = Math.floor(Math.random() * max_of_number); // 0 ~ 9までの数字を決定
         let random_color = Math.floor(Math.random() * num_of_color); // 四色の色を適当に決定
-        
-        if(random_num==14 && wild_num < wild_max){wild_num += 1; continue loop1;}
-        if(random_num==15 && wild_draw_four_num < wild_draw_four_max){wild_draw_four_num += 1; continue loop1;}
 
-        // >>>>>>> 色を文字列に変換 (デバッグ用なので、後から消す)
-        var color_str = '';
+        if(random_num==14 || random_num==15) {
+            if(random_num==14 && wild_num < wild_max){wild_num += 1; color_str="wild"; break loop1;}
+            if(random_num==15 && wild_draw_four_num < wild_draw_four_max){wild_draw_four_num += 1; color_str="wild"; break loop1;}
+            continue loop1;
+        }
+
         console.log(list_red.length, list_blu.length, list_gre.length, list_yel.length)
         if (random_color==0) {
             let _tmp = list_red.filter(function(val) {return val == random_num; }); // これの長さを図って2以上なら追加しないとみなす。
@@ -105,11 +154,11 @@ $("#btn1").on("click", function()  { // 参考文献: https://techacademy.jp/mag
         random_num = 'wild draw four';
     }
     var card_str = `${color_str}: ${random_num}`;
-    
+
     // if (counter_total > uno_card_num) {
     //     card_str = 'End game.Please reload.'
     // }
     // jQueryを使って画面にメッセージを表示する
     console.log(card_str, ',  ', `TOTAL->   red: ${list_red.length}, blue: ${list_blu.length}, green: ${list_gre.length}, yallow: ${list_yel.length}`);
     $("#tBox").val(card_str);
-  });
+}
